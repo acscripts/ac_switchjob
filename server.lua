@@ -1,34 +1,43 @@
-RegisterNetEvent('ac_switchjob:switchJob')
-AddEventHandler('ac_switchjob:switchJob', function()
+local cooldown = {}
+
+RegisterCommand(Config.CommandName, function(source)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	MySQL.Async.fetchAll('SELECT secondjob, secondjob_grade FROM users WHERE identifier = @identifier', {
-		['@identifier'] = xPlayer.identifier
-	}, function(result)
+	if cooldown[xPlayer.source] == nil or (GetGameTimer() - cooldown[xPlayer.source]) * 0.001 >= Config.Cooldown then
 
-		if result[1] ~= nil and result[1].secondjob ~= nil and result[1].secondjob_grade ~= nil then
-			MySQL.Async.execute('UPDATE users SET secondjob = @secondjob, secondjob_grade = @secondjob_grade WHERE identifier = @identifier', { 
-				['@secondjob'] = xPlayer.job.name,
-				['@secondjob_grade'] = xPlayer.job.grade,
-				['@identifier'] = xPlayer.identifier,
-			}, function(rows)
-				if rows ~= 0 then
+		MySQL.Async.fetchAll('SELECT secondjob, secondjob_grade FROM users WHERE identifier = @identifier', {
+			['@identifier'] = xPlayer.identifier
+		}, function(result)
+	
+			if result[1] ~= nil and result[1].secondjob ~= nil and result[1].secondjob_grade ~= nil then
+				MySQL.Async.execute('UPDATE users SET secondjob = @secondjob, secondjob_grade = @secondjob_grade WHERE identifier = @identifier', { 
+					['@secondjob'] = xPlayer.job.name,
+					['@secondjob_grade'] = xPlayer.job.grade,
+					['@identifier'] = xPlayer.identifier,
+				}, function(rows)
+					if rows ~= 0 then
+	
+						if Config.Discord.Enable then
+							sendToDiscord(string.format(Config.Discord.Message, xPlayer.name, xPlayer.job.name..' `'..xPlayer.job.grade..'`', result[1].secondjob.. ' `'..result[1].secondjob_grade..'`'))
+						end
+	
+						xPlayer.setJob(result[1].secondjob, result[1].secondjob_grade)
+						xPlayer = ESX.GetPlayerFromId(xPlayer.source)
+	
+						if Config.SwitchMessage ~= '' then
+							sendNotification(xPlayer.source, string.format(Config.SwitchMessage, xPlayer.job.label..': '..xPlayer.job.grade_label))
+						end
 
-					if Config.Discord.Enable then
-						sendToDiscord(string.format(Config.Discord.Message, xPlayer.name, xPlayer.job.name..' `'..xPlayer.job.grade..'`', result[1].secondjob.. ' `'..result[1].secondjob_grade..'`'))
+						cooldown[xPlayer.source] = GetGameTimer()
+	
 					end
+				end)
+			end
+		end)
 
-					xPlayer.setJob(result[1].secondjob, result[1].secondjob_grade)
-					xPlayer = ESX.GetPlayerFromId(xPlayer.source)
-
-					if Config.SwitchMessage ~= '' then
-						TriggerClientEvent('ac_switchjob:sendNotification', xPlayer.source, string.format(Config.SwitchMessage, xPlayer.job.label..': '..xPlayer.job.grade_label))
-					end
-
-				end
-			end)
-		end
-	end)
+	else
+		sendNotification(xPlayer.source, string.format(Config.CooldownMessage, math.ceil(Config.Cooldown - (GetGameTimer() - cooldown[xPlayer.source]) * 0.001)))
+	end
 end)
 
 
