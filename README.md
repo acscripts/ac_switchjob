@@ -14,5 +14,5 @@ _Everything is easily configurable._
 - No need to manually insert any SQL stuff
 
 ## Requirements
-- [ESX](https://github.com/esx-framework/esx-legacy) – Legacy or any other version
+- [ESX](https://github.com/esx-framework/esx-legacy) – Legacy (_with imports file_)
 - [oxmysql](https://github.com/overextended/oxmysql/)
