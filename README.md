@@ -15,4 +15,4 @@ _Everything is easily configurable._
 
 ## Requirements
 - [ESX](https://github.com/esx-framework/esx-legacy) – Legacy or any other version
-- [MySQL Async](https://github.com/brouznouf/fivem-mysql-async)
+- [oxmysql](https://github.com/overextended/oxmysql/)
