@@ -38,7 +38,7 @@ Config.SwitchMessage = 'You are now employed as %s.'
 
 
 -- The notification style you want. You can use any commented preset (make sure to have the dependent script running) or change it to you favorite one.
-function sendNotification(src, msg)
+SendNotification = function(src, msg)
 
 	TriggerClientEvent('esx:showNotification', src, msg)													-- Default GTA V notification.
 

@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'ANTOND.#8507'
 description 'Simple switchjob script.'
-version '1.2.0'
+version '1.2.1'
 
 server_only 'yes'
 
