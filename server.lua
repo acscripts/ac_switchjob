@@ -5,12 +5,12 @@ RegisterCommand(Config.CommandName, function(source)
 
 	if cooldown[xPlayer.source] == nil or (GetGameTimer() - cooldown[xPlayer.source]) * 0.001 >= Config.Cooldown then
 
-		exports.oxmysql:execute('SELECT secondjob, secondjob_grade FROM users WHERE identifier = ?', {
+		MySQL.query('SELECT secondjob, secondjob_grade FROM users WHERE identifier = ?', {
 			xPlayer.identifier
 		}, function(result)
 
 			if result[1] ~= nil and result[1].secondjob ~= nil and result[1].secondjob_grade ~= nil then
-				exports.oxmysql:update('UPDATE users SET secondjob = @secondjob, secondjob_grade = @secondjob_grade WHERE identifier = @identifier', { 
+				MySQL.update('UPDATE users SET secondjob = @secondjob, secondjob_grade = @secondjob_grade WHERE identifier = @identifier', { 
 					secondjob = xPlayer.job.name,
 					secondjob_grade = xPlayer.job.grade,
 					identifier = xPlayer.identifier,
@@ -51,5 +51,5 @@ end
 
 
 
-exports.oxmysql:execute('ALTER TABLE users ADD COLUMN IF NOT EXISTS secondjob VARCHAR(50) NOT NULL DEFAULT "unemployed"')
-exports.oxmysql:execute('ALTER TABLE users ADD COLUMN IF NOT EXISTS secondjob_grade INT(11) NOT NULL DEFAULT 0')
+MySQL.update('ALTER TABLE users ADD COLUMN IF NOT EXISTS secondjob VARCHAR(50) NOT NULL DEFAULT "unemployed"')
+MySQL.update('ALTER TABLE users ADD COLUMN IF NOT EXISTS secondjob_grade INT(11) NOT NULL DEFAULT 0')

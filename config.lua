@@ -14,19 +14,19 @@ Config.CooldownMessage = 'The job can be changed once every 15 seconds.\n%s seco
 Config.Discord = {
 	-- Change to false to disable Discord logging. If set to false, you can ignore the lines below.
 	Enable = true,
-	
+
 	-- '%s' is automatically replaced in orded by player name, first job and second job.
 	Message = '**%s** changed his job from **%s** to **%s**.',
-	
+
 	-- Discord webhook link.
 	Webhook = '',
-	
+
 	-- Log message name.
 	Name = 'ac_switchjob | LOG',
-	
+
 	-- Log message image.
 	Image = 'https://i.imgur.com/PpJ0Ffh.png',
-	
+
 	-- Log embed color, in DECIMAL format. You can use this tool: https://www.rapidtables.com/convert/number/hex-to-decimal.html
 	Color = 3092790
 }
